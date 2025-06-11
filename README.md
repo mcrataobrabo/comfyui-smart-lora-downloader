@@ -1,10 +1,38 @@
-# LoRA Auto Downloader for ComfyUI
+# 🚀 ComfyUI LoRA Auto Downloader
 
-A custom node package that automatically detects LoRA usage in workflows, checks if they are already downloaded, and downloads missing ones from CivitAI.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![ComfyUI](https://img.shields.io/badge/ComfyUI-Compatible-green.svg)](https://github.com/comfyanonymous/ComfyUI)
+
+> **Automatically detect and download missing LoRAs for your ComfyUI workflows!** 🎯
+
+Never again struggle with "LoRA not found" errors! This extension automatically detects missing LoRAs in your workflows and downloads them from CivitAI with a single click.
+
+## ⚡ Quick Start
+
+1. **Install** → Copy to `ComfyUI/custom_nodes/`
+2. **Restart** → Restart ComfyUI
+3. **Add Node** → Find "Auto LoRA Detector" under `loaders` > `lora`
+4. **Add Token** → Get your [CivitAI API token](https://civitai.com/user/account)
+5. **Run** → Missing LoRAs download automatically! 🎉
+
+## 🎯 Perfect For
+
+- ✅ **Fixing "LoRA not found" errors** instantly
+- ✅ **Sharing workflows** without worrying about missing files
+- ✅ **Trying new workflows** from the community
+- ✅ **Managing large LoRA collections** efficiently
 
 ## 📦 Included Nodes
 
 This package includes **4 custom nodes** for different use cases:
+
+| Node | Purpose | Best For | Key Feature |
+|------|---------|----------|-------------|
+| 🎯 **Auto LoRA Detector** ⭐ | One-click missing LoRA detection & download | Beginners & quick fixes | Simple one-click LoRA detection & download |
+| 🔧 **LoRA Auto Downloader** | Advanced workflow scanning with JSON input | Power users | Manual workflow JSON scanning |
+| 🔄 **Workflow Interceptor** | Automatic background processing | Set-and-forget automation | Automatic background processing |
+| 📁 **Directory Manager** | LoRA collection organization | Collection management | Directory management & cleanup |
 
 ### 🎯 AutoLoRADetector ⭐ (Recommended)
 **Category**: `loaders` → `lora`  
@@ -26,24 +54,38 @@ This package includes **4 custom nodes** for different use cases:
 **Best for**: Managing your LoRA collection  
 **Purpose**: Directory management and organization tools
 
-## Quick Start for Missing LoRAs
+## 🔥 Key Features
 
-**The simplest way to handle your missing LoRAs:**
+- **🤖 Automatic Detection** - Scans workflows for LoRA usage
+- **📥 Smart Downloads** - Finds and downloads from CivitAI automatically  
+- **🛡️ Safe & Secure** - Filename sanitization and error handling
+- **📊 Progress Reports** - Detailed status and download progress
+- **🎨 Multiple Formats** - Supports .safetensors, .ckpt, .pt
+- **🔧 Flexible Usage** - 4 different nodes for different needs
+- **🗂️ Directory Management** - Tools for managing and organizing your LoRA collection
+- **🔄 Workflow Interception** - Can hook into the execution system to automatically process all workflows
 
-1. Add the **Auto LoRA Detector** node to your workflow
-2. Add your CivitAI API token
-3. Enable `auto_download` 
-4. Execute the node - it will detect and download the missing LoRAs from your error message
+## 🚀 Installation
 
-## Features
+### Method 1: Manual Installation (Recommended)
 
-- **Automatic LoRA Detection**: Scans workflows for LoRA loader nodes
-- **Missing LoRA Detection**: Checks if LoRAs exist in your local directory
-- **CivitAI Integration**: Automatically downloads missing LoRAs from CivitAI
-- **Workflow Interception**: Can hook into the execution system to automatically process all workflows
-- **Directory Management**: Tools for managing and organizing your LoRA collection
+```bash
+cd ComfyUI/custom_nodes/
+git clone https://github.com/LargeModGames/comfyui-lora-auto-downloader.git
+# Restart ComfyUI
+```
 
-## Installation
+### Method 2: ComfyUI Manager
+
+*Coming soon - will be available through ComfyUI Manager*
+
+### Method 3: Download ZIP
+
+1. Download the [latest release](https://github.com/LargeModGames/comfyui-lora-auto-downloader/releases)
+2. Extract to `ComfyUI/custom_nodes/`
+3. Restart ComfyUI
+
+### Manual Installation Steps
 
 1. Copy the `lora_auto_downloader_package` folder to your ComfyUI custom_nodes directory:
    ```
@@ -57,7 +99,24 @@ This package includes **4 custom nodes** for different use cases:
 
 3. Restart ComfyUI
 
-## Usage
+## 🎮 Usage Examples
+
+### Quick Start for Missing LoRAs
+
+**The simplest way to handle your missing LoRAs:**
+
+1. Add the **Auto LoRA Detector** node to your workflow
+2. Add your CivitAI API token
+3. Enable `auto_download` 
+4. Execute the node - it will detect and download the missing LoRAs from your error message
+
+### Basic Usage - Fix Missing LoRAs
+```
+1. Add "Auto LoRA Detector" node
+2. Enter your CivitAI token
+3. Enable "auto_download"
+4. Run workflow → Missing LoRAs download automatically!
+```
 
 ### Manual LoRA Scanning
 
@@ -68,6 +127,14 @@ Use the **LoRA Auto Downloader** node:
 3. Add your CivitAI API token
 4. Enable `auto_download` to automatically download missing LoRAs
 5. Execute the node to scan and download
+
+### Advanced - Workflow JSON Scanning
+```
+1. Add "LoRA Auto Downloader" node  
+2. Paste your workflow JSON
+3. Configure download settings
+4. Execute to scan and download
+```
 
 ### Automatic Workflow Interception
 
@@ -186,49 +253,20 @@ Use the **LoRA Directory Manager** node:
 - ✅ Provides storage and organization insights
 - ✅ No download functionality - purely management
 
-## Node Types
+## 🎯 Which Node Should I Use?
 
-### AutoLoRADetector (Recommended for beginners)
-- **Purpose**: Simple detection and downloading of missing LoRAs
-- **Inputs**:
-  - `civitai_token`: Your CivitAI API token
-  - `auto_download`: Whether to download missing LoRAs automatically
-  - `check_missing`: Whether to check for missing LoRAs
-- **Outputs**:
-  - `status_report`: Detailed status of missing LoRAs and downloads
-  - `missing_loras_list`: JSON list of missing LoRAs
-  - `passthrough`: Pass-through for workflow connections
+- **Just want to fix missing LoRAs quickly?** → Use `AutoLoRADetector` ⭐
+- **Have a specific workflow JSON to scan?** → Use `LoRAAutoDownloader`
+- **Want automatic processing for all workflows?** → Use `WorkflowLoRAInterceptor`
+- **Need to manage your LoRA collection?** → Use `LoRADirectoryManager`
 
-### LoRAAutoDownloader
-- **Purpose**: Manual workflow scanning and LoRA downloading
-- **Inputs**: 
-  - `workflow_data`: JSON workflow to scan
-  - `civitai_token`: Your CivitAI API token
-  - `auto_download`: Whether to download missing LoRAs
-  - `check_only`: Only check without downloading
-- **Outputs**: 
-  - `status_report`: Detailed status of the scanning operation
-  - `missing_loras`: JSON list of missing LoRAs
+## 🔑 CivitAI API Token
 
-### WorkflowLoRAInterceptor
-- **Purpose**: Automatic workflow interception and processing
-- **Inputs**:
-  - `enable_auto_mode`: Enable automatic scanning for all workflows
-  - `civitai_token`: Your CivitAI API token
-  - `download_missing`: Whether to download missing LoRAs
-  - `scan_current_workflow`: Scan the current workflow manually
-- **Outputs**:
-  - `status`: Current status of the interceptor
-  - `missing_loras_report`: Report of missing LoRAs
-
-### LoRADirectoryManager
-- **Purpose**: Manage and organize your LoRA collection
-- **Inputs**:
-  - `action`: Choose action (list_loras, check_directory, cleanup_duplicates)
-- **Outputs**:
-  - `report`: Detailed report of the directory status
-
-## CivitAI API Token
+Get your free API token:
+1. Visit [CivitAI](https://civitai.com)
+2. Go to Account Settings → API Keys
+3. Generate new API key
+4. Copy and paste into the node
 
 To download LoRAs from CivitAI, you need an API token:
 
@@ -238,19 +276,41 @@ To download LoRAs from CivitAI, you need an API token:
 4. Generate a new API key
 5. Copy the token and paste it into the node's `civitai_token` field
 
-## Supported LoRA Formats
+## 📋 Requirements
+
+- **ComfyUI** (latest version recommended)
+- **Python 3.8+**
+- **requests** library (usually included with ComfyUI)
+- **CivitAI account** (free) for downloads
+
+## 📁 Supported Formats
 
 - `.safetensors` (preferred)
 - `.ckpt`
 - `.pt`
 
-## Download Location
+## 💾 Download Location
 
 LoRAs are downloaded to your ComfyUI LoRA directory, which is automatically detected using ComfyUI's folder system. This is typically the `models/loras/` folder within your ComfyUI installation, but the exact path depends on your ComfyUI setup and configuration.
 
-## Troubleshooting
+## 🌟 Why This Extension?
+
+| Problem | Solution |
+|---------|----------|
+| ❌ "LoRA not found" errors break workflows | ✅ Automatic detection and download |
+| ❌ Manual searching and downloading is tedious | ✅ One-click automation |
+| ❌ Sharing workflows requires bundling files | ✅ Recipients can auto-download missing LoRAs |
+| ❌ Managing large collections is messy | ✅ Built-in organization tools |
+
+## 🐛 Troubleshooting
 
 ### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| Nodes don't appear | Restart ComfyUI after installation |
+| Download fails | Check CivitAI token and internet connection |
+| Permission errors | Ensure ComfyUI can write to the LoRA directory |
 
 1. **"Permission denied" errors**: Ensure ComfyUI has write permissions to the LoRA directory
 2. **Download failures**: Check your internet connection and CivitAI token
@@ -260,22 +320,38 @@ LoRAs are downloaded to your ComfyUI LoRA directory, which is automatically dete
 
 Check the ComfyUI console for detailed logs during downloading and scanning operations.
 
-## 📋 Quick Reference Table
+## 🤝 Contributing
 
-| Node Name | Display Name | Best For | Key Feature |
-|-----------|--------------|----------|-------------|
-| `AutoLoRADetector` | Auto LoRA Detector ⭐ | Beginners | Simple one-click LoRA detection & download |
-| `LoRAAutoDownloader` | LoRA Auto Downloader | Advanced users | Manual workflow JSON scanning |
-| `WorkflowLoRAInterceptor` | Workflow LoRA Interceptor | Power users | Automatic background processing |
-| `LoRADirectoryManager` | LoRA Directory Manager | Organization | Directory management & cleanup |
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-## 🎯 Which Node Should I Use?
+### Development Setup
+```bash
+git clone https://github.com/LargeModGames/comfyui-lora-auto-downloader.git
+cd comfyui-lora-auto-downloader
+# Copy to ComfyUI custom_nodes directory
+# Make changes and test
+```
 
-- **Just want to fix missing LoRAs quickly?** → Use `AutoLoRADetector` ⭐
-- **Have a specific workflow JSON to scan?** → Use `LoRAAutoDownloader`
-- **Want automatic processing for all workflows?** → Use `WorkflowLoRAInterceptor`
-- **Need to manage your LoRA collection?** → Use `LoRADirectoryManager`
+## 📜 License
 
-## License
+This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
-This custom node is provided as-is for educational and personal use.
+## 🙏 Acknowledgments
+
+- [ComfyUI](https://github.com/comfyanonymous/ComfyUI) for the amazing framework
+- [CivitAI](https://civitai.com) for providing the LoRA repository
+- The ComfyUI community for inspiration and feedback
+
+## ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=LargeModGames/comfyui-lora-auto-downloader&type=Date)](https://star-history.com/#LargeModGames/comfyui-lora-auto-downloader&Date)
+
+---
+
+<div align="center">
+
+**Made with ❤️ for the ComfyUI community**
+
+[Report Bug](https://github.com/LargeModGames/comfyui-lora-auto-downloader/issues) • [Request Feature](https://github.com/LargeModGames/comfyui-lora-auto-downloader/issues) • [Discussions](https://github.com/LargeModGames/comfyui-lora-auto-downloader/discussions)
+
+</div>
