@@ -28,17 +28,13 @@ class AutoLoRADetector:
                 "civitai_token": ("STRING", {
                     "default": "",
                     "tooltip": "Your CivitAI API token for downloading models"
-                }),
-                "auto_download": ("BOOLEAN", {
+                }),                "auto_download": ("BOOLEAN", {
                     "default": True,
                     "tooltip": "Automatically download missing LoRAs"
-                }),                "check_missing": ("BOOLEAN", {
+                }),
+                "check_missing": ("BOOLEAN", {
                     "default": True,
                     "tooltip": "Check for missing LoRAs and report them"
-                }),
-                "test_mode": ("BOOLEAN", {
-                    "default": False,
-                    "tooltip": "Test download with common missing LoRAs"
                 }),
             },
             "optional": {
@@ -204,8 +200,7 @@ class AutoLoRADetector:
                     return True
         
         return False
-    
-    def detect_and_handle_loras(self, civitai_token="", auto_download=True, check_missing=True, test_mode=False, trigger_input=None):
+      def detect_and_handle_loras(self, civitai_token="", auto_download=True, check_missing=True, trigger_input=None):
         """Main function to detect and handle missing LoRAs"""
         
         status_lines = []
@@ -217,53 +212,23 @@ class AutoLoRADetector:
         
         status_lines.append(f"LoRA Directory: {self.lora_path}")
         status_lines.append(f"Current LoRA count: {len(lora_files)}")
-        
         if check_missing:
-            if test_mode:
-                # Test mode: Try to download specific LoRAs for testing
-                test_loras = ["example_lora_name"]  # Replace with actual LoRA names for testing
-                status_lines.append("\\n🧪 TEST MODE: Attempting to download test LoRAs...")
-                
-                for lora_name in test_loras:
-                    exists = self.check_lora_exists(lora_name)
-                    
-                    if not exists:
-                        missing_loras.append(lora_name)
-                        status_lines.append(f"\\n❌ Missing: {lora_name}")
-                        
-                        if auto_download and civitai_token:
-                            status_lines.append(f"  🔍 Searching CivitAI for {lora_name}...")
-                            success, message = self.search_and_download_lora(lora_name, civitai_token)
-                            
-                            if success:
-                                downloaded_loras.append(lora_name)
-                                status_lines.append(f"  ✅ {message}")
-                            else:
-                                status_lines.append(f"  ❌ {message}")
-                        elif auto_download and not civitai_token:
-                            status_lines.append(f"  ⚠️ CivitAI token required for download")
-                        else:
-                            status_lines.append(f"  ⚠️ Auto download disabled")
-                    else:
-                        status_lines.append(f"✅ Found: {lora_name}")
-            else:
-                # Normal mode: Show information and wait for workflow errors
-                status_lines.append("\\nReady to detect missing LoRAs from workflow validation errors.")
-                status_lines.append("To use: Connect this node and run a workflow with missing LoRAs.")
-                status_lines.append("💡 Enable 'test_mode' to test with known LoRAs.")
-                
-                # Show current LoRA directory info
-                status_lines.append("\\nCurrent LoRA directory contains:")
-                if len(lora_files) == 0:
-                    status_lines.append("  No LoRA files found")
-                else:
-                    # Show first few LoRAs as examples
-                    shown_files = lora_files[:5]
-                    for lora_file in shown_files:
-                        status_lines.append(f"  ✓ {lora_file}")
-                    if len(lora_files) > 5:
-                        status_lines.append(f"  ... and {len(lora_files) - 5} more files")
-          # Summary
+            # Show information and wait for workflow errors
+            status_lines.append("\\nReady to detect missing LoRAs from workflow validation errors.")
+            status_lines.append("To use: Connect this node and run a workflow with missing LoRAs.")
+            
+            # Show current LoRA directory info
+            status_lines.append("\\nCurrent LoRA directory contains:")
+            if len(lora_files) == 0:
+                status_lines.append("  No LoRA files found")
+            else:                # Show first few LoRAs as examples
+                shown_files = lora_files[:5]
+                for lora_file in shown_files:
+                    status_lines.append(f"  ✓ {lora_file}")
+                if len(lora_files) > 5:
+                    status_lines.append(f"  ... and {len(lora_files) - 5} more files")
+        
+        # Summary
         if downloaded_loras:
             status_lines.append(f"\\n✅ Successfully downloaded {len(downloaded_loras)} LoRA(s)")
         
