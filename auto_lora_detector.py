@@ -31,15 +31,14 @@ class AutoLoRADetector:
                 "check_missing": ("BOOLEAN", {
                     "default": True,
                     "tooltip": "Check for missing LoRAs and report them"
-                }),
-            },
+                }),            },
             "optional": {
                 "trigger_input": ("*", {"tooltip": "Connect any input to trigger the check"}),
             }
         }
     
-    RETURN_TYPES = ("STRING", "STRING", "*")
-    RETURN_NAMES = ("status_report", "missing_loras_list", "passthrough")
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "*")
+    RETURN_NAMES = ("status_report", "missing_loras_list", "downloaded_loras_list", "passthrough")
     FUNCTION = "detect_and_handle_loras"
     OUTPUT_NODE = True
     CATEGORY = "loaders/lora"
@@ -161,8 +160,7 @@ class AutoLoRADetector:
         """Check if a LoRA file exists locally"""
         if not lora_name:
             return False
-        
-        # Check various extensions and variations
+          # Check various extensions and variations
         base_name = lora_name.replace(".safetensors", "").replace(".ckpt", "").replace(".pt", "")
         extensions = [".safetensors", ".ckpt", ".pt"]
         
@@ -179,6 +177,7 @@ class AutoLoRADetector:
         
         status_lines = []
         missing_loras = []
+        downloaded_loras = []  # Track successfully downloaded LoRAs
         
         # Get the current LoRA directory info
         lora_files = [f for f in os.listdir(self.lora_path) 
@@ -212,6 +211,7 @@ class AutoLoRADetector:
                         success, message = self.search_and_download_lora(lora_name, civitai_token)
                         
                         if success:
+                            downloaded_loras.append(lora_name)  # Add to downloaded list
                             status_lines.append(f"  ✓ {message}")
                         else:
                             status_lines.append(f"  ✗ {message}")
@@ -221,8 +221,13 @@ class AutoLoRADetector:
                     status_lines.append(f"✓ Found: {lora_name}")
         
         # Summary
+        if downloaded_loras:
+            status_lines.append(f"\\n✅ Successfully downloaded {len(downloaded_loras)} LoRA(s)")
+        
         if missing_loras:
-            status_lines.append(f"\\n⚠ {len(missing_loras)} LoRA(s) are missing")
+            remaining_missing = len(missing_loras) - len(downloaded_loras)
+            if remaining_missing > 0:
+                status_lines.append(f"\\n⚠ {remaining_missing} LoRA(s) still missing")
             if not auto_download:
                 status_lines.append("Enable auto_download to download missing LoRAs")
             elif not civitai_token:
@@ -233,6 +238,7 @@ class AutoLoRADetector:
         return (
             "\\n".join(status_lines),
             json.dumps(missing_loras, indent=2),
+            json.dumps(downloaded_loras, indent=2),  # New output for downloaded LoRAs
             trigger_input
         )
 
