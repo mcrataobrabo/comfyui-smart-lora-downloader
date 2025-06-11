@@ -24,11 +24,9 @@ Your ComfyUI workflow was failing because these LoRAs are missing:
 
 ## 📁 **Installation Complete**
 
-✅ Custom node package installed at:
-`E:\ComfyUI_windows_portable\ComfyUI\custom_nodes\lora_auto_downloader_package\`
+✅ Custom node package installed in your ComfyUI custom_nodes directory
 
-✅ LoRA directory confirmed at:
-`E:\ComfyUI_windows_portable\ComfyUI\models\loras` (21 LoRAs currently installed)
+✅ LoRA directory automatically detected using ComfyUI's folder system
 
 ✅ All dependencies satisfied (requests library available)
 

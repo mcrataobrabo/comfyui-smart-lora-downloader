@@ -35,13 +35,6 @@ This package includes **4 custom nodes** for different use cases:
 3. Enable `auto_download` 
 4. Execute the node - it will detect and download the missing LoRAs from your error message
 
-The node will specifically look for LoRAs mentioned in validation errors like:
-- `breastinClass`
-- `GoodHands-vanilla`
-- `Addams`
-- `zyd232sChineseGirl_v16`
-- `GoodHands-beta2`
-
 ## Features
 
 - **Automatic LoRA Detection**: Scans workflows for LoRA loader nodes
@@ -253,7 +246,7 @@ To download LoRAs from CivitAI, you need an API token:
 
 ## Download Location
 
-LoRAs are downloaded to: `E:\\ComfyUI_windows_portable\\ComfyUI\\models\\loras`
+LoRAs are downloaded to your ComfyUI LoRA directory, which is automatically detected using ComfyUI's folder system. This is typically the `models/loras/` folder within your ComfyUI installation, but the exact path depends on your ComfyUI setup and configuration.
 
 ## Troubleshooting
 

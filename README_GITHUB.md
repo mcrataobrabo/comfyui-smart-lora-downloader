@@ -125,7 +125,7 @@ cd comfyui-lora-auto-downloader
 |-------|----------|
 | Nodes don't appear | Restart ComfyUI after installation |
 | Download fails | Check CivitAI token and internet connection |
-| Permission errors | Ensure ComfyUI can write to models/loras directory |
+| Permission errors | Ensure ComfyUI can write to the LoRA directory |
 
 See [full troubleshooting guide](README.md#troubleshooting) for more details.
 

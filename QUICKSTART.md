@@ -70,8 +70,10 @@ Use the "LoRA Directory Manager" node to:
 
 ## 7. File Locations
 
-- LoRAs are downloaded to: `E:\ComfyUI_windows_portable\ComfyUI\models\loras`
-- Custom node files: `E:\ComfyUI_windows_portable\ComfyUI\custom_nodes\lora_auto_downloader_package`
+- LoRAs are downloaded to: **Your ComfyUI LoRA directory** (automatically detected)
+  - The extension uses ComfyUI's built-in path detection system
+  - No hardcoded paths - works with any ComfyUI installation
+- Custom node files: `ComfyUI/custom_nodes/lora_auto_downloader_package`
 
 ## 8. Support
 
