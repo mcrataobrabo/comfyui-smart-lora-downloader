@@ -1,0 +1,32 @@
+{
+  "name": "LoRA Auto Downloader",
+  "description": "Automatically detects LoRA usage in workflows and downloads missing ones from CivitAI",
+  "version": "1.0.0",
+  "author": "ComfyUI Custom Node",
+  "license": "MIT",
+  "repository": "",
+  "install_type": "copy",
+  "requirements": [
+    "requests>=2.25.1"
+  ],
+  "files": [
+    "__init__.py",
+    "lora_auto_downloader.py", 
+    "workflow_interceptor.py",
+    "README.md",
+    "requirements.txt",
+    "example_workflow.json",
+    "test.py",
+    "install.bat"
+  ],
+  "nodelist": [
+    "LoRAAutoDownloader",
+    "WorkflowLoRAScanner", 
+    "WorkflowLoRAInterceptor",
+    "LoRADirectoryManager"
+  ],
+  "categories": [
+    "loaders",
+    "lora"
+  ]
+}

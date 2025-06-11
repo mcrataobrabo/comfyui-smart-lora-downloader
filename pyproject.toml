@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comfyui-lora-auto-downloader"
+version = "1.0.0"
+description = "Automatically detect and download missing LoRAs for ComfyUI workflows"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "LargeModGames", email = "your-email@example.com"}
+]
+keywords = ["comfyui", "lora", "automation", "ai", "machine-learning"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.25.1",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/LargeModGames/comfyui-lora-auto-downloader"
+"Bug Reports" = "https://github.com/LargeModGames/comfyui-lora-auto-downloader/issues"
+"Source" = "https://github.com/LargeModGames/comfyui-lora-auto-downloader"
+"Documentation" = "https://github.com/LargeModGames/comfyui-lora-auto-downloader#readme"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black",
+    "flake8",
+    "mypy",
+]
+
+[tool.setuptools.packages.find]
+include = ["lora_auto_downloader_package*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
