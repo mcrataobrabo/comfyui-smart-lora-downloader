@@ -6,6 +6,11 @@ import time
 import logging
 import folder_paths
 from server import PromptServer
+try:
+    from .lora_name_matcher import LoRANameMatcher
+    HAS_NAME_MATCHER = True
+except ImportError:
+    HAS_NAME_MATCHER = False
 
 class AutoLoRADetector:
     """
@@ -27,11 +32,15 @@ class AutoLoRADetector:
                 "auto_download": ("BOOLEAN", {
                     "default": True,
                     "tooltip": "Automatically download missing LoRAs"
-                }),
-                "check_missing": ("BOOLEAN", {
+                }),                "check_missing": ("BOOLEAN", {
                     "default": True,
                     "tooltip": "Check for missing LoRAs and report them"
-                }),            },
+                }),
+                "test_mode": ("BOOLEAN", {
+                    "default": False,
+                    "tooltip": "Test download with common missing LoRAs"
+                }),
+            },
             "optional": {
                 "trigger_input": ("*", {"tooltip": "Connect any input to trigger the check"}),
             }
@@ -49,7 +58,6 @@ class AutoLoRADetector:
         missing_loras = []
         
         # Look for the pattern in error messages like:
-        # "Value not in list: lora_name: 'breastinClass' not in (list of length 21)"
         lines = error_message.split('\n')
         for line in lines:
             if "lora_name:" in line and "not in" in line:
@@ -64,42 +72,67 @@ class AutoLoRADetector:
         return missing_loras
     
     def search_and_download_lora(self, lora_name, civitai_token):
-        """Search for and download a specific LoRA from CivitAI"""
+        """Search for and download a specific LoRA from CivitAI using enhanced matching"""
         if not civitai_token:
             return False, "No CivitAI token provided"
             
         try:
-            # Search for the model on CivitAI
             headers = {"Authorization": f"Bearer {civitai_token}"}
             search_url = "https://civitai.com/api/v1/models"
             
-            params = {
-                "query": lora_name,
-                "types": "LORA",
-                "sort": "Highest Rated",
-                "limit": 3
-            }
-            
-            response = requests.get(search_url, headers=headers, params=params, timeout=30)
-            if response.status_code != 200:
-                return False, f"Search failed: HTTP {response.status_code}"
-            
-            data = response.json()
-            items = data.get("items", [])
-            
-            if not items:
-                return False, "No matching LoRAs found on CivitAI"
-            
-            # Try to find the best match
-            best_match = None
-            for item in items:
-                item_name = item.get("name", "").lower()
-                if lora_name.lower() in item_name or item_name in lora_name.lower():
-                    best_match = item
-                    break
-            
-            if not best_match:
-                best_match = items[0]  # Use first result if no exact match
+            if HAS_NAME_MATCHER:
+                # Use enhanced matching
+                name_matcher = LoRANameMatcher()
+                search_results, used_queries = name_matcher.search_civitai_with_multiple_strategies(
+                    lora_name, civitai_token
+                )
+                
+                if not search_results:
+                    return False, f"No LoRAs found for '{lora_name}' using multiple search strategies."
+                
+                best_match, similarity = name_matcher.find_best_match_from_search_results(
+                    lora_name, search_results
+                )
+                
+                if not best_match or similarity < 0.2:  # Lower threshold for better coverage
+                    suggestion_text = f"No good match found for '{lora_name}' (best similarity: {similarity:.2f})"
+                    if search_results:
+                        suggestion_text += f"\nSearched using: {', '.join(used_queries)}"
+                        suggestion_text += f"\nTop result: '{search_results[0].get('name', 'Unknown')}'"
+                    return False, suggestion_text
+                
+                print(f"Enhanced matching found: '{best_match.get('name')}' (similarity: {similarity:.2f})")
+                
+            else:
+                # Fallback to original simple matching
+                params = {
+                    "query": lora_name,
+                    "types": "LORA", 
+                    "sort": "Highest Rated",
+                    "limit": 5
+                }
+                
+                response = requests.get(search_url, headers=headers, params=params, timeout=30)
+                if response.status_code != 200:
+                    return False, f"Search failed: HTTP {response.status_code}"
+                
+                data = response.json()
+                items = data.get("items", [])
+                
+                if not items:
+                    return False, f"No matching LoRAs found for '{lora_name}'"
+                
+                # Try to find the best match using simple logic
+                best_match = None
+                for item in items:
+                    item_name = item.get("name", "").lower()
+                    if lora_name.lower() in item_name or item_name in lora_name.lower():
+                        best_match = item
+                        break
+                
+                if not best_match:
+                    best_match = items[0]  # Use first result if no exact match
+                    print(f"No exact match found for '{lora_name}', using: '{best_match.get('name')}'")
             
             # Download the best match
             model_versions = best_match.get("modelVersions", [])
@@ -172,14 +205,13 @@ class AutoLoRADetector:
         
         return False
     
-    def detect_and_handle_loras(self, civitai_token="", auto_download=True, check_missing=True, trigger_input=None):
+    def detect_and_handle_loras(self, civitai_token="", auto_download=True, check_missing=True, test_mode=False, trigger_input=None):
         """Main function to detect and handle missing LoRAs"""
         
         status_lines = []
         missing_loras = []
         downloaded_loras = []  # Track successfully downloaded LoRAs
-        
-        # Get the current LoRA directory info
+          # Get the current LoRA directory info
         lora_files = [f for f in os.listdir(self.lora_path) 
                      if f.endswith(('.safetensors', '.ckpt', '.pt'))]
         
@@ -187,40 +219,51 @@ class AutoLoRADetector:
         status_lines.append(f"Current LoRA count: {len(lora_files)}")
         
         if check_missing:
-            # For now, we'll simulate checking common missing LoRAs
-            # In a real implementation, this would hook into the validation system
-            common_missing_loras = [
-                "breastinClass",
-                "GoodHands-vanilla", 
-                "Addams",
-                "zyd232sChineseGirl_v16",
-                "GoodHands-beta2"
-            ]
-            
-            status_lines.append("\\nChecking for common missing LoRAs...")
-            
-            for lora_name in common_missing_loras:
-                exists = self.check_lora_exists(lora_name)
+            if test_mode:
+                # Test mode: Try to download specific LoRAs for testing
+                test_loras = ["example_lora_name"]  # Replace with actual LoRA names for testing
+                status_lines.append("\\n🧪 TEST MODE: Attempting to download test LoRAs...")
                 
-                if not exists:
-                    missing_loras.append(lora_name)
-                    status_lines.append(f"✗ Missing: {lora_name}")
+                for lora_name in test_loras:
+                    exists = self.check_lora_exists(lora_name)
                     
-                    if auto_download and civitai_token:
-                        status_lines.append(f"  Attempting to download {lora_name}...")
-                        success, message = self.search_and_download_lora(lora_name, civitai_token)
+                    if not exists:
+                        missing_loras.append(lora_name)
+                        status_lines.append(f"\\n❌ Missing: {lora_name}")
                         
-                        if success:
-                            downloaded_loras.append(lora_name)  # Add to downloaded list
-                            status_lines.append(f"  ✓ {message}")
+                        if auto_download and civitai_token:
+                            status_lines.append(f"  🔍 Searching CivitAI for {lora_name}...")
+                            success, message = self.search_and_download_lora(lora_name, civitai_token)
+                            
+                            if success:
+                                downloaded_loras.append(lora_name)
+                                status_lines.append(f"  ✅ {message}")
+                            else:
+                                status_lines.append(f"  ❌ {message}")
+                        elif auto_download and not civitai_token:
+                            status_lines.append(f"  ⚠️ CivitAI token required for download")
                         else:
-                            status_lines.append(f"  ✗ {message}")
-                    elif auto_download and not civitai_token:
-                        status_lines.append(f"  ⚠ CivitAI token required for download")
+                            status_lines.append(f"  ⚠️ Auto download disabled")
+                    else:
+                        status_lines.append(f"✅ Found: {lora_name}")
+            else:
+                # Normal mode: Show information and wait for workflow errors
+                status_lines.append("\\nReady to detect missing LoRAs from workflow validation errors.")
+                status_lines.append("To use: Connect this node and run a workflow with missing LoRAs.")
+                status_lines.append("💡 Enable 'test_mode' to test with known LoRAs.")
+                
+                # Show current LoRA directory info
+                status_lines.append("\\nCurrent LoRA directory contains:")
+                if len(lora_files) == 0:
+                    status_lines.append("  No LoRA files found")
                 else:
-                    status_lines.append(f"✓ Found: {lora_name}")
-        
-        # Summary
+                    # Show first few LoRAs as examples
+                    shown_files = lora_files[:5]
+                    for lora_file in shown_files:
+                        status_lines.append(f"  ✓ {lora_file}")
+                    if len(lora_files) > 5:
+                        status_lines.append(f"  ... and {len(lora_files) - 5} more files")
+          # Summary
         if downloaded_loras:
             status_lines.append(f"\\n✅ Successfully downloaded {len(downloaded_loras)} LoRA(s)")
         
@@ -233,7 +276,9 @@ class AutoLoRADetector:
             elif not civitai_token:
                 status_lines.append("Provide CivitAI token to enable downloads")
         else:
-            status_lines.append("\\n✓ All checked LoRAs are available!")
+            status_lines.append("\\n✅ LoRA directory ready!")
+            status_lines.append("💡 This node detects missing LoRAs from workflow validation errors.")
+            status_lines.append("💡 Run a workflow with missing LoRAs to trigger automatic detection.")
         
         return (
             "\\n".join(status_lines),
@@ -241,12 +286,40 @@ class AutoLoRADetector:
             json.dumps(downloaded_loras, indent=2),  # New output for downloaded LoRAs
             trigger_input
         )
+    
+    def process_workflow_error(self, error_message, civitai_token="", auto_download=True):
+        """Process a workflow validation error and handle missing LoRAs"""
+        missing_loras = self.get_missing_loras_from_error(error_message)
+        downloaded_loras = []
+        status_lines = []
+        
+        if not missing_loras:
+            return "No missing LoRAs detected in error message", "[]", "[]"
+        
+        status_lines.append(f"Detected {len(missing_loras)} missing LoRA(s): {', '.join(missing_loras)}")
+        
+        for lora_name in missing_loras:
+            if auto_download and civitai_token:
+                status_lines.append(f"\\nAttempting to download: {lora_name}")
+                success, message = self.search_and_download_lora(lora_name, civitai_token)
+                
+                if success:
+                    downloaded_loras.append(lora_name)
+                    status_lines.append(f"✓ {message}")
+                else:
+                    status_lines.append(f"✗ {message}")
+            else:
+                status_lines.append(f"\\n⚠ {lora_name} - Auto download disabled or no token provided")
+        
+        if downloaded_loras:
+            status_lines.append(f"\\n✅ Successfully downloaded {len(downloaded_loras)} LoRA(s)")
+            status_lines.append("🔄 Please restart your workflow to use the new LoRAs")
+        
+        return (
+            "\\n".join(status_lines),
+            json.dumps(missing_loras, indent=2),
+            json.dumps(downloaded_loras, indent=2)
+        )
 
 
-# Add to the node mappings
-if "NODE_CLASS_MAPPINGS" in globals():
-    NODE_CLASS_MAPPINGS["AutoLoRADetector"] = AutoLoRADetector
-    NODE_DISPLAY_NAME_MAPPINGS["AutoLoRADetector"] = "Auto LoRA Detector"
-else:
-    NODE_CLASS_MAPPINGS = {"AutoLoRADetector": AutoLoRADetector}
-    NODE_DISPLAY_NAME_MAPPINGS = {"AutoLoRADetector": "Auto LoRA Detector"}
+

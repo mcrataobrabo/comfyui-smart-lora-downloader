@@ -16,6 +16,26 @@ Never again struggle with "LoRA not found" errors! This extension automatically 
 4. **Add Token** → Get your [CivitAI API token](https://civitai.com/user/account)
 5. **Run** → Missing LoRAs download automatically! 🎉
 
+## 🚨 Important Usage Notes
+
+### 🔄 **RESTART REQUIRED** After Downloads
+⚠️ **After LoRAs are downloaded, you MUST restart ComfyUI** to see them in your Load LoRA nodes. ComfyUI only scans the LoRA directory on startup.
+
+### 🎯 **Recommended Workflow Setup**
+For best results, use **both nodes together**:
+- **Auto LoRA Detector** (for manual testing with `test_mode=True`)
+- **Workflow LoRA Interceptor** (for automatic background processing)
+
+This provides both manual control and automatic detection.
+
+⚠️ **Note**: You may need to **run the Workflow LoRA Interceptor twice** after ComfyUI startup to properly initialize it.
+
+### 📝 **Check for Name Variations**
+Downloaded LoRAs may have **slightly different names** than expected:
+- Different versions, author conventions, or CivitAI naming
+
+**Always check your Load LoRA dropdown** after download to select the newly available file!
+
 ## 🎯 Perfect For
 
 - ✅ **Fixing "LoRA not found" errors** instantly
@@ -111,17 +131,24 @@ git clone https://github.com/LargeModGames/comfyui-lora-auto-downloader.git
 **The simplest way to handle your missing LoRAs:**
 
 1. Add the **Auto LoRA Detector** node to your workflow
-2. Add your CivitAI API token
-3. Enable `auto_download` 
-4. Execute the node - it will detect and download the missing LoRAs from your error message
+2. Add your CivitAI API token  
+3. Enable `auto_download` and `test_mode` for testing
+4. Execute the node - it will detect and download missing LoRAs
 
-### Basic Usage - Fix Missing LoRAs
+### Advanced Usage with Workflow JSON
 ```
-1. Add "Auto LoRA Detector" node
+1. Add "LoRA Auto Downloader" node
 2. Enter your CivitAI token
-3. Enable "auto_download"
-4. Run workflow → Missing LoRAs download automatically!
+3. Paste workflow JSON into the text field
+4. Run → Scans and downloads all missing LoRAs
 ```
+
+## 🔍 Smart Matching Features
+
+The extension uses **enhanced name matching** to find LoRAs even when names don't match exactly:
+
+- ✅ Handles version differences, case variations, and naming conventions
+
 
 ### Manual LoRA Scanning
 
@@ -314,9 +341,23 @@ LoRAs are downloaded to your ComfyUI LoRA directory, which is automatically dete
 | Issue | Solution |
 |-------|----------|
 | Nodes don't appear | Restart ComfyUI after installation |
+| **Downloaded LoRAs not visible** | **⚠️ RESTART ComfyUI after downloads** |
 | Download fails | Check CivitAI token and internet connection |
+| **LoRA has different name** | **Check Load LoRA dropdown for variations** |
 | Permission errors | Ensure ComfyUI can write to the LoRA directory |
 | "requests" import error | Use ComfyUI's Python: `ComfyUI/python_embeded/python.exe -m pip install requests` |
+
+### ⚠️ Critical: Restart After Downloads
+**ComfyUI only scans the LoRA directory on startup.** After downloading new LoRAs:
+1. **Stop ComfyUI completely**
+2. **Restart ComfyUI** 
+3. **Check your Load LoRA nodes** for the new files
+
+### 🔍 Finding Downloaded LoRAs
+Downloaded LoRAs may have different names than expected:
+- Look for **similar names** in your Load LoRA dropdown
+- Check for **version differences** (v1.5, v2.0, etc.)
+- Search for **author names** or keywords from the original name
 
 1. **"Permission denied" errors**: Ensure ComfyUI has write permissions to the LoRA directory
 2. **Download failures**: Check your internet connection and CivitAI token
