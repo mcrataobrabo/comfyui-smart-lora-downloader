@@ -274,4 +274,4 @@ class LoRADirectoryManager:
             else:
                 report_lines.append("✓ No obvious duplicates found")
         
-        return ("\\n".join(report_lines),)
+        return ("\n".join(report_lines),)
