@@ -92,9 +92,14 @@ git clone https://github.com/LargeModGames/comfyui-lora-auto-downloader.git
    ComfyUI/custom_nodes/lora_auto_downloader_package/
    ```
 
-2. Install the required dependencies:
+2. **Dependencies are automatically handled** - The `requests` library is typically included with ComfyUI
+   - If you encounter import errors, use your ComfyUI's Python environment:
    ```bash
-   pip install requests
+   # For portable ComfyUI installations:
+   ComfyUI/python_embeded/python.exe -m pip install requests
+   
+   # For regular Python installations with ComfyUI:
+   python -m pip install requests
    ```
 
 3. Restart ComfyUI
@@ -311,10 +316,12 @@ LoRAs are downloaded to your ComfyUI LoRA directory, which is automatically dete
 | Nodes don't appear | Restart ComfyUI after installation |
 | Download fails | Check CivitAI token and internet connection |
 | Permission errors | Ensure ComfyUI can write to the LoRA directory |
+| "requests" import error | Use ComfyUI's Python: `ComfyUI/python_embeded/python.exe -m pip install requests` |
 
 1. **"Permission denied" errors**: Ensure ComfyUI has write permissions to the LoRA directory
 2. **Download failures**: Check your internet connection and CivitAI token
 3. **Node not appearing**: Restart ComfyUI after installation
+4. **Import errors**: If you get "No module named 'requests'", install it using ComfyUI's Python environment (see installation instructions above)
 
 ### Logging
 
