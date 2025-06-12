@@ -3,8 +3,8 @@ requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "comfyui-lora-auto-downloader"
-version = "1.0.0"
+name = "comfyui-smart-lora-downloader"
+version = "1.0.1"
 description = "Automatically detect and download missing LoRAs for ComfyUI workflows"
 readme = "README.md"
 license = {text = "MIT"}
