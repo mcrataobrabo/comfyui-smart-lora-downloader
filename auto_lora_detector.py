@@ -175,8 +175,7 @@ class AutoLoRADetector:
             
             return True, f"Successfully downloaded: {safe_filename}"
             
-        except Exception as e:
-            return False, f"Download error: {str(e)}"
+        except Exception as e:            return False, f"Download error: {str(e)}"
     
     def sanitize_filename(self, filename):
         """Sanitize filename for safe saving"""
@@ -189,7 +188,7 @@ class AutoLoRADetector:
         """Check if a LoRA file exists locally"""
         if not lora_name:
             return False
-          # Check various extensions and variations
+        # Check various extensions and variations
         base_name = lora_name.replace(".safetensors", "").replace(".ckpt", "").replace(".pt", "")
         extensions = [".safetensors", ".ckpt", ".pt"]
         
@@ -198,17 +197,19 @@ class AutoLoRADetector:
                 full_path = os.path.join(self.lora_path, variation + ext)
                 if os.path.exists(full_path):
                     return True
-        
         return False
-      def detect_and_handle_loras(self, civitai_token="", auto_download=True, check_missing=True, trigger_input=None):
+    
+    def detect_and_handle_loras(self, civitai_token="", auto_download=True, check_missing=True, trigger_input=None):
         """Main function to detect and handle missing LoRAs"""
         
         status_lines = []
         missing_loras = []
         downloaded_loras = []  # Track successfully downloaded LoRAs
-          # Get the current LoRA directory info
-        lora_files = [f for f in os.listdir(self.lora_path) 
-                     if f.endswith(('.safetensors', '.ckpt', '.pt'))]
+        # Get the current LoRA directory info
+        lora_files = [
+            f for f in os.listdir(self.lora_path)
+            if f.endswith(('.safetensors', '.ckpt', '.pt'))
+        ]
         
         status_lines.append(f"LoRA Directory: {self.lora_path}")
         status_lines.append(f"Current LoRA count: {len(lora_files)}")
