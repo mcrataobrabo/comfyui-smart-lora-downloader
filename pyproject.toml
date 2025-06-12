@@ -32,10 +32,10 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/LargeModGames/comfyui-lora-auto-downloader"
-"Bug Reports" = "https://github.com/LargeModGames/comfyui-lora-auto-downloader/issues"
-"Source" = "https://github.com/LargeModGames/comfyui-lora-auto-downloader"
-"Documentation" = "https://github.com/LargeModGames/comfyui-lora-auto-downloader#readme"
+"Homepage" = "https://github.com/LargeModGames/comfyui-smart-lora-downloader"
+"Bug Reports" = "https://github.com/LargeModGames/comfyui-smart-lora-downloader/issues"
+"Source" = "https://github.com/LargeModGames/comfyui-smart-lora-downloader"
+"Documentation" = "https://github.com/LargeModGames/comfyui-smart-lora-downloader#readme"
 
 [project.optional-dependencies]
 dev = [
@@ -46,7 +46,7 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["lora_auto_downloader_package*"]
+include = ["smart_lora_downloader*"]
 
 [tool.black]
 line-length = 88
